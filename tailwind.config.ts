@@ -7,12 +7,22 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      coral: "#E85382",
-      skyBlue: "#39BADF",
-      midYellow: "#E1A725",
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "2rem",
+        lg: "4rem",
+        xl: "6rem",
+        "2xl": "9rem",
+      },
     },
     extend: {
+      colors: {
+        coral: "#E85382",
+        skyBlue: "#39BADF",
+        midYellow: "#E1A725",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

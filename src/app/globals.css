@@ -2,3 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .rounded-x-full {
+        @apply rounded-r-full rounded-l-full;
+    }
+    .view-btn {
+        animation: grow 200ms linear forwards alternate;
+    }
+}
+
+.scale-up {
+    animation: scaleUp 200ms ease-in forwards;
+}
+.scale-down {
+    animation: scaleDown 200ms ease-in forwards;
+}
+
+.slideInRight {
+    transition: 300ms linear;
+    animation: slideIn 300ms linear alternate forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes grow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0.1;
+        transform: scale(0.1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes scaleDown {
+    from {
+        /* display: none; */
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0.1;
+        transform: scale(0.1);
+        display: none;
+    }
+}

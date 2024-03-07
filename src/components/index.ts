@@ -1,0 +1,5 @@
+export {default as Searchbar} from "./Searchbar"
+export {default as Theme} from "./Theme"
+export {default as Pokemon} from "./Pokemon"
+export {default as AboutPokemon} from "./About-Pokemon"
+export {default as Paginator} from "./Paginator"
