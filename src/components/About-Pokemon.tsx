@@ -4,6 +4,7 @@ import React, { FC, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import Image from "next/image";
 import { usePokemon } from "@/hooks/pokemon-context";
+import PokemonStats from "./Pokemon-Stats";
 
 interface ViewProps {
   /**Hides or show the Pokemon about window */
@@ -17,10 +18,12 @@ const AboutPokemon: FC<ViewProps> = ({ visible = false, onBackClick }) => {
   const {pokemon} = usePokemon()
   return (
     <div
-      className={`absolute z-50 top-0 right-0 w-full h-full bg-black/30 backdrop-blur-[3px] transition-all ${visible ? 'slideInRight': 'hidden'}`}
+      className={`absolute z-50 top-0 right-0 w-full h-full bg-black/30 backdrop-blur-[3px] transition-all ${
+        visible ? "slideInRight" : "hidden"
+      }`}
     >
       <div className="content h-full bg-slate-50 p-2 right-0 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 ml-auto flex flex-col">
-        <div className="relative bg-gradient-to-b from-coral/50 to-coral h-1/4 rounded-xl p-2 flex flex-col justify-between items-center">
+        <div className="relative bg-gradient-to-b from-primary/50 to-primary h-1/4 rounded-xl p-2 flex flex-col justify-between items-center">
           <button
             onClick={onBackClick}
             type="button"
@@ -39,28 +42,48 @@ const AboutPokemon: FC<ViewProps> = ({ visible = false, onBackClick }) => {
         </div>
 
         <section className="mt-5 md:mt-10">
-          <header className="space-y-2 text-center py-5 bg-gradient-to-r from-gray-50 via-gray-200/80 to-gray-50 bg-bottom">
-            <h2 className="text-xl font-medium">{ pokemon?.name }</h2>
+          <header className="space-y-2 text-center py-5 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-bottom">
+            <h2 className="text-xl font-medium">{pokemon?.name}</h2>
             <div className="flex iems-center justify-center gap-3 w-full">
-              <div className="flex rounded-x-full bg-[#EEEEEE] p-2"></div>
-              <div className="flex rounded-x-full bg-[#EEEEEE] p-2"></div>
+              {pokemon?.types.map((item: any) => (
+                <div
+                  key={item}
+                  className="flex rounded-l-full rounded-r-full bg-gray-200 px-3 text-sm"
+                >
+                  {item.type.name}
+                </div>
+              ))}
             </div>
           </header>
           <h3 className="font-semibold text-center p-2">{tab}</h3>
-          <div className="details bg-gradient-to-r from-gray-50 via-gray-200/80 to-gray-50 divide-y divide-gray-200">
-            <div className="flex gap-8 p-2">
-              <span className="w-full text-right">Height</span>
-              <span className="w-full text-left font-bold">1.0m</span>
+          {tab === "About" && (
+            <div className="details bg-gradient-to-r from-gray-50 via-gray-200/80 to-gray-50 divide-y divide-gray-200">
+              <div className="flex gap-8 p-2">
+                <span className="w-full text-right">Height</span>
+                <span className="w-full text-left font-bold">
+                  {pokemon?.height}m
+                </span>
+              </div>
+              <div className="flex gap-8 p-2">
+                <span className="w-full text-right">Weight</span>
+                <span className="w-full text-left font-bold">
+                  {pokemon?.weight}kg
+                </span>
+              </div>
+              <div className="flex gap-8 p-2">
+                <span className="w-full text-right">Abilities</span>
+                <div className="w-full">
+                  {pokemon?.abilities.map((item: any) => (
+                    <span key={item} className="text-left font-bold block">
+                      {item?.ability?.name},
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="flex gap-8 p-2">
-              <span className="w-full text-right">Weight</span>
-              <span className="w-full text-left font-bold">13.0kg</span>
-            </div>
-            <div className="flex gap-8 p-2">
-              <span className="w-full text-right">Abilities</span>
-              <span className="w-full text-left font-bold">1.0m</span>
-            </div>
-          </div>
+          )}
+
+          {tab === "Stats" && <PokemonStats />}
         </section>
 
         {/* Details Tab */}

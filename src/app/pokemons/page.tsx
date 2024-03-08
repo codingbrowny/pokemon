@@ -12,8 +12,6 @@ const PokemonsPage = () => {
   const [showThemeOverlay, setShowThemeOverlay] = useState<boolean>(false)
   const {loading, pokemonList} = usePokemon()
 
-  // const pokemons = await getPokemons();
-
   //  useEffect(() => {
   //    const fetchData = async () => {
   //      try {
@@ -47,49 +45,63 @@ const PokemonsPage = () => {
 
   return (
     <>
-    <section className="flex flex-col gap-10 h-full relative">
-      <nav className="flex items-center lg:justify-between gap-5 max-md:px-3 md:px-7 lg:px-16 h-[72px] shadow-md">
-        <header className="flex items-center gap-3">
-          <Image
-            src={"/images/logo.svg"}
-            alt="Logo"
-            className="lg:w-32 w-24 md:w-28 object-contain mt-6"
-            width={100}
-            height={100}
-          />
-          <h1 className="text-2xl font-semibold">
-            Poké<span className="text-coral">book</span>
-          </h1>
-        </header>
-        <div>
-          <Searchbar variant="skeleton" />
-        </div>
-        <Theme.ThemeButton active onClick={() => setShowThemeOverlay(true)} />
-      </nav>
+      <section className="flex flex-col gap-10 h-full relative">
+        <nav className="flex items-center lg:justify-between gap-5 max-md:px-3 md:px-7 lg:px-16 h-[72px] shadow-md">
+          <header className="flex items-center gap-3">
+            <Image
+              src={"/images/logo.svg"}
+              alt="Logo"
+              className="lg:w-32 w-24 md:w-28 object-contain mt-6"
+              width={100}
+              height={100}
+            />
+            <h1 className="text-2xl font-semibold">
+              Poké<span className="text-primary">book</span>
+            </h1>
+          </header>
+          <div>
+            <Searchbar variant="skeleton" />
+          </div>
+          <Theme.ThemeButton active onClick={() => setShowThemeOverlay(true)} />
+        </nav>
 
-      <div className="container h-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8 py-10">
-        {pokemonList.map((item, i) => {
-          return (
-            <div key={i} className="col-span-1">
-              <Pokemon
-                data={item}
-                handleViewClick={() => setViewDetails(true)}
-              />
-            </div>
-          );
-        })}
-      </div>
+        {loading && (
+          <div className="h-full flex flex-col justify-center items-center">
+            <span className="bg-primary w-8 h-8 rounded-full animate-ping block mt-5"></span>
+            <h2>Loading</h2>
+          </div>
+        )}
 
-      <div className="mt-auto py-3">
-        <Paginator />
-      </div>
-    </section>
+        {!loading && (
+          <div className="container h-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8 py-10">
+            {pokemonList.map((item, i) => {
+              return (
+                <div key={i} className="col-span-1">
+                  <Pokemon
+                    data={item}
+                    handleViewClick={() => setViewDetails(true)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {!loading && (
+          <div className="mt-auto py-3">
+            <Paginator />
+          </div>
+        )}
+      </section>
       <AboutPokemon
         visible={viewDetails}
         onBackClick={() => setViewDetails(false)}
       />
       {/* Theme Overlay */}
-    <Theme.ThemeOverlay show={showThemeOverlay} onThemeClick={()=>setShowThemeOverlay(false)} />
+      <Theme.ThemeOverlay
+        show={showThemeOverlay}
+        onThemeClick={() => setShowThemeOverlay(false)}
+      />
     </>
   );
 };

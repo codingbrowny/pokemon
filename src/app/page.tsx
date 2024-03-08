@@ -14,7 +14,7 @@ export default function Home() {
       />
       <header>
         <h1 className="text-2xl lg:text-3xl xl:text-4xl font-semibold">
-          Poké <span className="text-coral">book</span>
+          Poké <span className="text-primary">book</span>
         </h1>
       </header>
       <p className="font-light tracking-tight lg:mt-3 text-center">
@@ -24,7 +24,7 @@ export default function Home() {
 
       <div className="searchbar relative w-full md:w-80 lg:w-96 bg-none max-md:mt-5 md:mt-12 lg:mt-16 text-center space-y-5">
         <Searchbar />
-        <Link href={""} className="underline text-gray-700 text-sm block">View all</Link>
+        <Link href={"/pokemons"} className="underline text-gray-700 text-sm block">View all</Link>
       </div>
     </main>
   );

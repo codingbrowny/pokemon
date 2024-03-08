@@ -2,25 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700,500,600,300&display=swap");
+
+:root {
+    --primaryColor: #E85382
+}
+
+html[aria-theme="theme1"] {
+    --primaryColor: #E85382
+}
+html[aria-theme="theme2"] {
+    --primaryColor: #39BADF
+}
+html[aria-theme="theme3"] {
+    --primaryColor: #E1A725
+}
+
+html, body {
+    font-family: 'Clash Display', sans-serif;
+}
+
 @layer utilities {
     .rounded-x-full {
         @apply rounded-r-full rounded-l-full;
     }
     .view-btn {
-        animation: grow 200ms linear forwards alternate;
+        animation: grow 150ms linear forwards alternate;
     }
 }
 
 .scale-up {
-    animation: scaleUp 200ms ease-in forwards;
+    animation: scaleUp 150ms ease-in forwards;
 }
 .scale-down {
-    animation: scaleDown 200ms ease-in forwards;
+    animation: scaleDown 150ms ease-in forwards;
 }
 
 .slideInRight {
-    transition: 300ms linear;
-    animation: slideIn 300ms linear alternate forwards;
+    transition: 200ms linear;
+    animation: slideIn 200ms linear alternate forwards;
 }
 
 @keyframes slideIn {

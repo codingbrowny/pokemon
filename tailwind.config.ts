@@ -22,6 +22,7 @@ const config: Config = {
         coral: "#E85382",
         skyBlue: "#39BADF",
         midYellow: "#E1A725",
+        primary: "var(--primaryColor)"
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

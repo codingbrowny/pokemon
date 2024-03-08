@@ -14,6 +14,10 @@ interface IPokemon {
   loading: boolean;
   error: any;
   handlePokemonClick: (data?: any) => void;
+  totalPages: number;
+  pageSize: number;
+  pageOffset: number;
+  paginate: (page: number, size: number) => void;
 }
 
 const initialState: IPokemon = {
@@ -21,7 +25,11 @@ const initialState: IPokemon = {
   pokemon: {},
   loading: false,
   error: null,
-  handlePokemonClick: () => {},
+  totalPages: 0,
+  handlePokemonClick: () => { },
+  pageOffset: 1,
+  pageSize: 8,
+  paginate: ()=>{}
 };
 
 const PokemonContext = createContext<IPokemon>(initialState);
@@ -34,25 +42,34 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [filteredList, setFilteredList] = useState<any[]>();
   const [pageSize, setPageSize] = useState<number>(8);
   const [pageOffset, setPageOffset] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0)
 
   function handlePokemonClick(data: any) {
+    console.log(data)
     setPokemon(data);
   }
 
   function paginate(page: number, size: number) {
     setPageOffset(page);
     setPageSize(size);
+    console.log(pageOffset)
   }
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const response = await fetch(
+          "https://pokeapi.co/api/v2/pokemon?limit=50"
+        ); // Adjust limit as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch Pokemon list");
+        }
+        const data = await response.json();
+
         // Fetch details for each Pokemon
-        const detailsPromises = Array.from({length:50},).map(async (pokemon: any, i) => {
-          const detailsResponse = await fetch(
-            `https://pokeapi.co/api/v2/pokemon/${i+1}/`
-          );
+        const detailsPromises = data.results.map(async (pokemon: any) => {
+          const detailsResponse = await fetch(pokemon.url);
           if (!detailsResponse.ok) {
             throw new Error("Failed to fetch Pokemon details");
           }
@@ -61,7 +78,7 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
         const pokemonDetails = await Promise.all(detailsPromises);
         setFilteredList(pokemonDetails);
-        setPokemonList(pokemonDetails)
+        setLoading(false)
       } catch (error) {
         setLoading(false);
         setError(error);
@@ -74,12 +91,11 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
     
     useEffect(() => {
       if (filteredList?.length) {
-        const filtered = filteredList?.map((item, i) => {
-          if (i <= pageSize) {
-            return item;
-          }
-        });
+        const startIndex = pageOffset > 1 ? pageSize * pageOffset : 0;
+        const endIndex = startIndex + pageSize; // pageOffset>1?pageSize*2:pageSize
+        const filtered = filteredList.slice(startIndex, endIndex);
         setPokemonList(filtered);
+        setTotalPages(Math.ceil(filteredList.length / pageSize));
       }
     }, [filteredList, pageSize, pageOffset]);
 
@@ -89,6 +105,10 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
     pokemon,
     pokemonList,
     handlePokemonClick,
+    totalPages,
+    pageSize,
+    pageOffset,
+    paginate
   };
 
   return (
