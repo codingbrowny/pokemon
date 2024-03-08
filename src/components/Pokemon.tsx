@@ -11,32 +11,12 @@ interface IPokemon {
 
 const Pokemon: FC<IPokemon> = ({ handleViewClick, data }) => {
   const { handlePokemonClick, pokemon } = usePokemon()
-  const [typeIcons, setTypeIcons] = useState<any[]>([])
   const [imageError, setImageError] = useState<boolean>(false)
   const handleClick = () => {
     handlePokemonClick(data)
     handleViewClick()
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchPromise = pokemon.types.map(async (item: any) => {
-          const response = await fetch(item.type.url);
-          if (!response.ok) {
-            throw new Error("Failed to fetch Pokemon details");
-          }
-          return await response.json();
-        });
-
-        const icons = await Promise.all(fetchPromise)
-        console.log(icons)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchData()
-  }, [pokemon?.types])
 
   return (
     <div className="rounded-xl p-2 bg-white drop-shadow-md group transition-all">

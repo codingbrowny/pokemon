@@ -18,6 +18,8 @@ interface IPokemon {
   pageSize: number;
   pageOffset: number;
   paginate: (page: number, size: number) => void;
+  search: string;
+  handleSearch: (str: string) => void;
 }
 
 const initialState: IPokemon = {
@@ -26,10 +28,12 @@ const initialState: IPokemon = {
   loading: false,
   error: null,
   totalPages: 0,
-  handlePokemonClick: () => { },
+  handlePokemonClick: () => {},
   pageOffset: 1,
   pageSize: 8,
-  paginate: ()=>{}
+  paginate: () => {},
+  search: "",
+  handleSearch: () => {},
 };
 
 const PokemonContext = createContext<IPokemon>(initialState);
@@ -42,17 +46,22 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [filteredList, setFilteredList] = useState<any[]>();
   const [pageSize, setPageSize] = useState<number>(8);
   const [pageOffset, setPageOffset] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0)
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [search, searchTerm] = useState<string>("");
 
   function handlePokemonClick(data: any) {
-    console.log(data)
+    console.log(data);
     setPokemon(data);
   }
 
   function paginate(page: number, size: number) {
     setPageOffset(page);
     setPageSize(size);
-    console.log(pageOffset)
+    console.log(pageOffset);
+  }
+
+  function handleSearch(str: string) {
+    searchTerm(str);
   }
 
   useEffect(() => {
@@ -78,7 +87,7 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
         const pokemonDetails = await Promise.all(detailsPromises);
         setFilteredList(pokemonDetails);
-        setLoading(false)
+        setLoading(false);
       } catch (error) {
         setLoading(false);
         setError(error);
@@ -87,17 +96,27 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     fetchData();
   }, []);
-    
-    
-    useEffect(() => {
-      if (filteredList?.length) {
-        const startIndex = pageOffset > 1 ? pageSize * pageOffset : 0;
-        const endIndex = startIndex + pageSize; // pageOffset>1?pageSize*2:pageSize
-        const filtered = filteredList.slice(startIndex, endIndex);
-        setPokemonList(filtered);
-        setTotalPages(Math.ceil(filteredList.length / pageSize));
-      }
-    }, [filteredList, pageSize, pageOffset]);
+
+  useEffect(() => {
+    if (filteredList?.length) {
+      const startIndex = pageOffset > 1 ? pageSize * pageOffset : 0;
+      const endIndex = startIndex + pageSize; // pageOffset>1?pageSize*2:pageSize
+      const filtered = filteredList.slice(startIndex, endIndex);
+      setPokemonList(filtered);
+      setTotalPages(Math.ceil(filteredList.length / pageSize));
+    }
+  }, [filteredList, pageSize, pageOffset]);
+
+  useEffect(() => {
+    if (search) {
+      const match = Array.from(filteredList!).filter(
+        (item: any) =>
+          (item?.name as string).toLowerCase().includes(search.toLowerCase())
+      );
+      setPokemonList(match);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const providerValues = {
     loading,
@@ -108,7 +127,9 @@ export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
     totalPages,
     pageSize,
     pageOffset,
-    paginate
+    paginate,
+    search,
+    handleSearch,
   };
 
   return (

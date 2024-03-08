@@ -15,7 +15,8 @@ interface ViewProps {
 
 const AboutPokemon: FC<ViewProps> = ({ visible = false, onBackClick }) => {
   const [tab, setTab] = useState<TabItem>("About");
-  const {pokemon} = usePokemon()
+  const { pokemon } = usePokemon()
+
   return (
     <div
       className={`absolute z-50 top-0 right-0 w-full h-full bg-black/30 backdrop-blur-[3px] transition-all ${
@@ -23,7 +24,7 @@ const AboutPokemon: FC<ViewProps> = ({ visible = false, onBackClick }) => {
       }`}
     >
       <div className="content h-full bg-slate-50 p-2 right-0 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 ml-auto flex flex-col">
-        <div className="relative bg-gradient-to-b from-primary/50 to-primary h-1/4 rounded-xl p-2 flex flex-col justify-between items-center">
+        <div className={`relative bg-gradient-to-b from-coral/50 to-coral h-1/4 rounded-xl p-2 flex flex-col justify-between items-center`}>
           <button
             onClick={onBackClick}
             type="button"

@@ -1,9 +1,19 @@
-import React, { FC } from 'react'
+"use client";
+import { usePokemon } from "@/hooks/pokemon-context";
+import { useRouter } from "next/navigation";
+import React, { FC, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
-type Variant = "skeleton" | "colorful"
+type Variant = "skeleton" | "colorful";
 
-const Searchbar:FC<{variant?:Variant}> = ({variant = "colorful"}) => {
+const Searchbar: FC<{ variant?: Variant }> = ({ variant = "colorful" }) => {
+  const { handleSearch, search:searchTerm } = usePokemon();
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+  function handleSearchClick() {
+    handleSearch(search);
+    variant === "colorful" && router.replace("/pokemons");
+  }
   return (
     <>
       <label
@@ -16,6 +26,12 @@ const Searchbar:FC<{variant?:Variant}> = ({variant = "colorful"}) => {
       <div className="relative w-full bg-transparent">
         <input
           type="text"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearchClick();
+            }
+          }}
+          onChange={(e) => setSearch(e.target.value)}
           id="pokemon-search"
           className={`block w-full bg-transparent p-4 rounded-l-full rounded-r-full outline-none placeholder:text-gray-400 text-gray-400 ${
             variant === "colorful"
@@ -26,6 +42,8 @@ const Searchbar:FC<{variant?:Variant}> = ({variant = "colorful"}) => {
           required
         />
         <button
+          disabled={variant === "skeleton"}
+          onClick={() => handleSearchClick()}
           type="submit"
           className={`absolute text-sm p-3 rounded-full transition-all duration-200 ${
             variant === "colorful"
@@ -38,6 +56,6 @@ const Searchbar:FC<{variant?:Variant}> = ({variant = "colorful"}) => {
       </div>
     </>
   );
-}
+};
 
-export default Searchbar
+export default Searchbar;

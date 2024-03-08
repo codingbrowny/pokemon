@@ -28,7 +28,7 @@ const toggleDropdown = () => {
             key={i}
             className={`rounded-lg px-3 py-1 ${
               i + 1 === pageOffset
-                ? "bg-primaryl text-white"
+                ? "bg-primary text-white"
                 : "bg-gray-300 text-gray-800"
             }`}
           >
